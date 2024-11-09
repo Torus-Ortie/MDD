@@ -4,11 +4,13 @@ import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { User } from './interfaces/user.interface';
 import { SessionService } from './services/session.service';
+import {MatToolbarModule} from '@angular/material/toolbar'; 
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, MatToolbarModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
