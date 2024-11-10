@@ -15,13 +15,13 @@ import { AuthService } from '../../../../services/auth.service';
 export class LoginComponent implements OnInit {
   public hide = true;
   public onError = false;
-
-  public form: FormGroup;
+  public form!: FormGroup;
 
   constructor(private authService: AuthService, 
     private fb: FormBuilder, 
     private router: Router,
-    private articleService: ArticleService) { }
+    private articleService: ArticleService
+  ) { }
 
     ngOnInit(): void {
       this.form = this.fb.group({

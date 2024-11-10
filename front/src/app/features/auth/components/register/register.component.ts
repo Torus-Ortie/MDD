@@ -15,12 +15,13 @@ import { User } from '../../../../interfaces/user.interface';
 export class RegisterComponent implements OnInit{
 
   public onError = false;
-  public form: FormGroup;
+  public form!: FormGroup;
 
   constructor(private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private articleService: ArticleService) { }
+    private articleService: ArticleService
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
