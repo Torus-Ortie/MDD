@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SessionService } from '../../../services/session.service';
-import { AuthService } from '../../../services/auth.service';
-import { RegisterRequest } from '../../../interfaces/registerRequest.interface';
-import { AuthSuccess } from '../../../interfaces/authSuccess.interface';
-import { User } from '../../../interfaces/user.interface';
+import { ArticleService } from '../../../../services/article.service';
+import { AuthService } from '../../../../services/auth.service';
+import { RegisterRequest } from '../../../../interfaces/auth.interface';
+import { AuthSuccess } from '../../../../interfaces/auth.interface';
+import { User } from '../../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
-  public onError = false;
-  public form!: FormGroup<{ email: FormControl<string | null>; name: FormControl<string | null>; password: FormControl<string | null>; }>;
+export class RegisterComponent implements OnInit{
 
-  constructor(
-    private authService: AuthService,
+  public onError = false;
+  public form: FormGroup;
+
+  constructor(private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private sessionService: SessionService
-  ) { }
+    private articleService: ArticleService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -37,7 +36,7 @@ export class RegisterComponent implements OnInit {
       (response: AuthSuccess) => {
         localStorage.setItem('token', response.token);
         this.authService.me().subscribe((user: User) => {
-          this.sessionService.logIn(user);
+          this.articleService.logIn(user);
           this.router.navigate(['/rentals'])
         });
       },
