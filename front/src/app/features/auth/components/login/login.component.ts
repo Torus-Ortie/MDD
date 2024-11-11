@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../../../interfaces/user.interface';
-import { ArticleService } from '../../../../services/article.service';
+import { SessionService } from '../../../../services/session.service';
 import { AuthSuccess } from '../../../../interfaces/auth.interface';
 import { LoginRequest } from '../../../../interfaces/auth.interface'; 
 import { AuthService } from '../../../../services/auth.service';
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, 
     private fb: FormBuilder, 
     private router: Router,
-    private articleService: ArticleService
+    private sessionService: SessionService
   ) { }
 
     ngOnInit(): void {
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       (response: AuthSuccess) => {
         localStorage.setItem('token', response.token);
         this.authService.me().subscribe((user: User) => {
-          this.articleService.logIn(user);
+          this.sessionService.logIn(user);
           this.router.navigate(['/rentals'])
         });
         this.router.navigate(['/rentals'])
