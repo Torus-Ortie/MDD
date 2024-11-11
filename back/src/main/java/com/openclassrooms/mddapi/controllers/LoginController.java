@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.openclassrooms.mddapi.dto.UserDTO;
 import com.openclassrooms.mddapi.dto.UserLoginDTO;
 import com.openclassrooms.mddapi.services.JWTService;
 import com.openclassrooms.mddapi.services.UserService;
@@ -57,4 +59,12 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } 
 	}
+
+	@GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        UserDTO userDTO = userService.getCurrentUser(authentication);
+        return ResponseEntity.ok(userDTO);
+    }
 }

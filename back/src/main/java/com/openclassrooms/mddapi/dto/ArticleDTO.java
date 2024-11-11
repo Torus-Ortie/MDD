@@ -10,7 +10,7 @@ public class ArticleDTO {
     private Long id;
     private String title;
     private String content;
-    private String username;
+    private String name;
     private Long userId;
     private String themeTitle;
     private Long themeId;

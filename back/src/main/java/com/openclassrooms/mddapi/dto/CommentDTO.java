@@ -9,7 +9,7 @@ public class CommentDTO {
 private Long id;
     private String content;
     private Long userId;
-    private String username;
+    private String name;
     private Long articleId;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
