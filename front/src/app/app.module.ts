@@ -8,11 +8,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './features/interceptors/jwt.interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MeComponent } from './components/me/me.component';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { jwtInterceptor } from './features/interceptors/jwt.interceptor';
 
 const materialModule = [
   MatButtonModule,
@@ -35,8 +35,7 @@ const materialModule = [
     ...materialModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    provideHttpClient()
+    provideHttpClient(withInterceptors([jwtInterceptor]))
   ],
   bootstrap: [AppComponent]
 })

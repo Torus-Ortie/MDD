@@ -72,7 +72,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "MDD:build:production"
+              "buildTarget": "MDD:build:production",
+              "proxyConfig": "src/proxy.config.json"
             },
             "development": {
               "buildTarget": "MDD:build:development"

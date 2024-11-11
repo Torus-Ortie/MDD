@@ -37,8 +37,11 @@ export class RegisterComponent implements OnInit{
       next: (response: AuthSuccess) => {
         console.log("ok test");
         localStorage.setItem('token', response.token);
+        console.log("ok localStorage test");
         this.authService.me().subscribe((user: User) => {
+          console.log("ok me test");
           this.sessionService.logIn(user);
+          console.log("ok logIn test");
           this.router.navigate(['/rentals'])
         });
       },
