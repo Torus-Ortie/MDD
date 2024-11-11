@@ -33,7 +33,7 @@ public class UserService {
         User newUser = new User();
 
         // Convert UserDTO to User
-        newUser.setUsername(user.getUsername());
+        newUser.setName(user.getName());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setEmail(user.getEmail());
         modelMapper.map(userRepository.save(newUser), UserDTO.class);
@@ -54,7 +54,7 @@ public class UserService {
         // Convert User to UserDTO
         currentUser.setId(user.getId());
         currentUser.setEmail(user.getEmail());
-        currentUser.setUsername(user.getUsername());
+        currentUser.setName(user.getName());
         currentUser.setCreated_at(user.getCreated_at());
         currentUser.setUpdated_at(user.getUpdated_at());
         return currentUser;
