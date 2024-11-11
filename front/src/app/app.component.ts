@@ -31,13 +31,13 @@ export class AppComponent implements OnInit {
   }
 
   public autoLog(): void {
-    this.authService.me().subscribe(
-      (user: User) => {
+    this.authService.me().subscribe({
+      next: (user: User) => {
         this.sessionService.logIn(user);
       },
-      (_) => {
+      error: (_) => {
         this.sessionService.logOut();
       }
-    )
+    })
   }
 }

@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
 
   public submit(): void {
     const loginRequest = this.form.value as LoginRequest;
-    this.authService.login(loginRequest).subscribe(
-      (response: AuthSuccess) => {
+    this.authService.login(loginRequest).subscribe({
+      next: (response: AuthSuccess) => {
         localStorage.setItem('token', response.token);
         this.authService.me().subscribe((user: User) => {
           this.sessionService.logIn(user);
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         });
         this.router.navigate(['/rentals'])
       },
-      error => this.onError = true
-    );
+      error: () => this.onError = true
+    });
   }
 }
