@@ -35,20 +35,13 @@ export class RegisterComponent implements OnInit{
     const registerRequest = this.form.value as RegisterRequest;
     this.authService.register(registerRequest).subscribe({
       next: (response: AuthSuccess) => {
-        console.log("ok test");
         localStorage.setItem('token', response.token);
-        console.log("ok localStorage test");
         this.authService.me().subscribe((user: User) => {
-          console.log("ok me test");
           this.sessionService.logIn(user);
-          console.log("ok logIn test");
           this.router.navigate(['/rentals'])
         });
       },
-      error: () => {
-        console.log("error test");
-        this.onError = true;
-      }
+      error: () => this.onError = true
     });
   }
 
