@@ -3,14 +3,14 @@ main {
     align-items: center;
     padding-top: 10vh;
     padding-inline: 1rem;
-  }
+}
   
-  mat-card-actions {
+mat-card-actions {
    --gap: 4rem;
-  }
+}
   
-  @media (width < 599px) {
+@media (width < 599px) {
     mat-card-actions {
       --direction: column;
     }
-  }
+}

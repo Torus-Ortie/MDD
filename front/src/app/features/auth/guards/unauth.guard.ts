@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {CanActivate, Router} from "@angular/router"; 
-import { SessionService } from "../../services/session.service";
+import { SessionService } from "../../../services/session.service";
 
 @Injectable({providedIn: 'root'})
 export class UnauthGuard implements CanActivate {
@@ -13,7 +13,7 @@ export class UnauthGuard implements CanActivate {
 
   public canActivate(): boolean {
     if (this.sessionService.isLogged) {
-      this.router.navigate(['rentals']);
+      this.router.navigate(['profile']);
       return false;
     }
     return true;
