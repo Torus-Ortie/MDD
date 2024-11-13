@@ -1,22 +1,54 @@
-<div class="me">
-    <mat-card class="">
-        <mat-card-title>
-
-            <div fxLayout="row" fxLayoutAlign="start center">
-                <button mat-icon-button (click)="back()">
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
-                <h1>User information</h1>
-            </div>
-            
-        </mat-card-title>
-        <mat-card-content>
-            <div *ngIf="user" fxLayout="column" fxLayoutAlign="start center">
-                <p>Name: {{ user.name }}</p>
-                <p>Email: {{ user.email }}</p>
-                <p><i>Create at: </i> {{ user.created_at| date: 'longDate'}}</p>
-                <p><i>Last update: </i> {{ user.updated_at| date: 'longDate'}}</p>
-            </div>
-        </mat-card-content>
-    </mat-card>
-</div>
+<main>
+    <section>
+      <h2>Profil utilisateur</h2>
+  
+      <form (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>{{labels['username']}}</mat-label>
+          <input matInput [formControl]="formControls['username']" (blur)="onBlur('username')">
+          <mat-error *ngIf="formControls['username'].invalid && formControls['username'].touched">{{errorMessages['username']}}</mat-error>
+        </mat-form-field>
+  
+  
+        <mat-form-field appearance="outline">
+          <mat-label>{{labels['email']}}</mat-label>
+          <input matInput [formControl]="formControls['email']" (blur)="onBlur('email')">
+          <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
+        </mat-form-field>
+  
+        <button type="submit" [disabled]="formControls['email'].invalid || formControls['username'].invalid" mat-raised-button color="primary">Sauvegarder</button>
+      </form>
+      <div class="flex">
+        <button type="button" mat-button color="warn" (click)="onLogout()">Se déconnecteur</button>
+      </div>
+  
+    </section>
+  
+  
+    <mat-divider></mat-divider>
+  
+    <section>
+      <h2>Abonnements</h2>
+  
+      <div class="auto-grid">
+  
+          @for (theme of subscribedThemes; track theme.id) {
+            <mat-card class="card">
+              <mat-card-header>
+                <mat-card-title class="mat-h3">{{ theme.title }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="line-clamp">{{ theme.description }}</p>
+              </mat-card-content>
+              <mat-card-actions class="actions">
+                <button mat-raised-button color="primary" (click)="onUnsubscribe(theme.id)">Se désabonner</button>
+              </mat-card-actions>
+            </mat-card>
+          }
+  
+      </div>
+    </section>
+  
+  
+  </main>
+  

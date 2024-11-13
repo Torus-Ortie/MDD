@@ -11,7 +11,19 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getUserById(id: number): Observable<User> {
-    return this.httpClient.get<User>(`${environment.apiUrl}/user/${id}`);
+  public getUser(): Observable<User> {
+    return this.httpClient.get<User>(`${environment.apiUrl}/me`)
+  }
+
+  public updateUser(user: User): Observable<User> {
+    return this.httpClient.put<User>(`${environment.apiUrl}/me`, user);
+  }
+
+  public subscribeTheme(themeId: number): Observable<User> {
+    return this.httpClient.post<User>(`${environment.apiUrl}/me/themes/${themeId}`, {});
+  }
+
+  public unsubscribeTheme(themeId: number): Observable<User> {
+    return this.httpClient.delete<User>(`${environment.apiUrl}/me/themes/${themeId}`);
   }
 }

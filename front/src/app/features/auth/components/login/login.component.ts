@@ -1,47 +1,80 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from '../../../../interfaces/user.interface';
 import { SessionService } from '../../../../services/session.service';
-import { AuthSuccess } from '../../../../interfaces/auth.interface';
 import { LoginRequest } from '../../../../interfaces/auth.interface'; 
 import { AuthService } from '../../../../services/auth.service';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
-  public hide = true;
-  public onError = false;
-  public form!: FormGroup;
+export class LoginComponent implements OnInit, OnDestroy {
+  public formControls: { [key: string]: FormControl } = {
+    emailOrUsername: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  };
 
-  constructor(private authService: AuthService, 
-    private fb: FormBuilder, 
-    private router: Router,
-    private sessionService: SessionService
-  ) { }
+  public labels: { [key: string]: string } = {
+    emailOrUsername: 'E-mail ou nom d’utilisateur',
+    password: 'Mot de passe',
+  };
 
-    ngOnInit(): void {
-      this.form = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.min(3)]]
+  public controlNames: { [key: string]: string } = {
+    emailOrUsername: 'votre e-mail ou nom d’utilisateur',
+    password: 'votre mot de passe',
+  };
+
+  public errorMessages: { [key: string]: string } = {
+    emailOrUsername: '',
+    password: '',
+  };
+
+  loginSubscription: Subscription | null = null;
+
+  constructor(private authService: AuthService,
+              private sessionService: SessionService, private router: Router) {}
+
+  ngOnInit(): void {}
+
+  login(): void {
+    const loginRequest: LoginRequest = {
+      email: this.formControls['email'].value,
+      password: this.formControls['password'].value,
+    };
+
+    this.loginSubscription = this.authService.login(loginRequest)
+      .subscribe({
+        next: (data) => {
+          this.sessionService.logIn(data.token);
+          this.router.navigate(['/articles']).then(
+            () => {
+            }
+          );
+        },
+        error: error => {
+          throw error;
+        }
       });
-    }
+  }
 
-  public submit(): void {
-    const loginRequest = this.form.value as LoginRequest;
-    this.authService.login(loginRequest).subscribe({
-      next: (response: AuthSuccess) => {
-        localStorage.setItem('token', response.token);
-        this.authService.me().subscribe((user: User) => {
-          this.sessionService.logIn(user);
-          this.router.navigate(['/profile'])
-        });
-        this.router.navigate(['/profile'])
-      },
-      error: () => this.onError = true
-    });
+  onBlur(controlName: string): void {
+    const control = this.formControls[controlName];
+    control.markAsTouched();
+    this.errorMessages[controlName] = control.hasError('required') ? `Veuillez saisir ${this.controlNames[controlName]}` : '';
+  }
+
+  onSubmit(): void {
+    if (this.formControls['emailOrUsername'].valid && this.formControls['password'].valid) {
+      this.login();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if(this.loginSubscription){
+      this.loginSubscription.unsubscribe();
+    }
   }
 }

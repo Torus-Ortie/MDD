@@ -1,24 +1,24 @@
-<div class="login" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card>
-        <mat-card-header fxLayoutAlign="center center">
-            <mat-card-title>Login</mat-card-title>
-        </mat-card-header>
-        <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
-            <mat-card-content fxLayout="column">
-                <mat-form-field fxFlex>
-                    <input matInput placeholder="Email" formControlName="email">
-                </mat-form-field>
-                <mat-form-field fxFlex>
-                    <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password"
-                        formControlName="password">
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                        [attr.aria-pressed]="hide">
-                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            </mat-card-content>
-            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
-            <p *ngIf="onError" class="error">An error occurred</p>
-        </form>
-    </mat-card>
-</div>
+<main class="grid-template-layout relative">
+    <a routerLink="/" class="return-link">
+      <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+    </a>
+  
+    <form (ngSubmit)="onSubmit()">
+      <h2>Se connecter</h2>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>{{labels['emailOrUsername']}}</mat-label>
+        <input matInput [formControl]="formControls['emailOrUsername']" (blur)="onBlur('emailOrUsername')">
+        <mat-error *ngIf="formControls['emailOrUsername'].invalid && formControls['emailOrUsername'].touched">{{errorMessages['emailOrUsername']}}</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>{{labels['password']}}</mat-label>
+        <input type="password" matInput [formControl]="formControls['password']" (blur)="onBlur('password')">
+        <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
+      </mat-form-field>
+  
+      <button type="submit" [disabled]="formControls['emailOrUsername'].invalid || formControls['password'].invalid" mat-raised-button color="primary">Se connecter</button>
+    </form>
+  </main>
+  

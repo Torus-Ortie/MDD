@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { LoginRequest } from '../interfaces/auth.interface';
 import { AuthSuccess  } from '../interfaces/auth.interface';
 import { RegisterRequest } from '../interfaces/auth.interface';
-import { User } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -23,7 +22,4 @@ export class AuthService {
     return this.httpClient.post<AuthSuccess>(`${environment.apiUrl}/auth/login`, loginRequest);
   }
 
-  public me(): Observable<User> {
-    return this.httpClient.get<User>(`${environment.apiUrl}/auth/me`);
-  }
 }
