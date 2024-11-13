@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mddapi.dto.UserDTO;
 import com.openclassrooms.mddapi.dto.UserLoginDTO;
+import com.openclassrooms.mddapi.dto.UserRegisterDTO;
 import com.openclassrooms.mddapi.services.JWTService;
 import com.openclassrooms.mddapi.services.UserService;
 
@@ -38,9 +39,9 @@ public class LoginController {
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-	public ResponseEntity<Map<String, String>> getRegistreted(@RequestBody UserLoginDTO userLoginDTO) {
-		userService.registerNewUser(userLoginDTO);
-		Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+	public ResponseEntity<Map<String, String>> getRegistreted(@RequestBody UserRegisterDTO userRegisterDTO) {
+		userService.registerNewUser(userRegisterDTO);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userRegisterDTO.getEmail(), userRegisterDTO.getPassword());
         String token = jwtService.generateToken(authentication);
         return ResponseEntity.ok(Collections.singletonMap("token", token));
 	}
@@ -50,7 +51,7 @@ public class LoginController {
     @ResponseBody
 	public ResponseEntity<Map<String, String>> getToken(@RequestBody UserLoginDTO userLoginDTO) {
 		try {
-			Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+			Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmailOrName(), userLoginDTO.getPassword());
             String token = jwtService.generateToken(authentication);
             return ResponseEntity.ok(Collections.singletonMap("token", token));
 		} catch (AuthenticationException e) {
