@@ -1,0 +1,18 @@
+.subtitle {
+    gap: 3rem;
+  }
+  
+  .card {
+    height: 100%;
+  }
+  
+  @media (width < 599px) {
+    section.flex {
+      --direction: column;
+      align-items: center;
+      &  a {
+        width: fit-content;
+      }
+    }
+  }
+  

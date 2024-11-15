@@ -1,0 +1,39 @@
+<main class="flex flex-col">
+    <section class="flex justify-between">
+      <a mat-raised-button color="primary" routerLink="/articles/new">Créer un article</a>
+      <button mat-button [matMenuTriggerFor]="menu">Trier par ⬇</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onSortClick('date', sortDirections['date'])">
+          <strong>Date </strong> <span class="text-sm">{{sortDirections['date'] === 'asc' ? '⬆ Asc' : '⬇ Desc'}}</span>
+        </button>
+        <button mat-menu-item (click)="onSortClick('title', sortDirections['title'])">
+          <strong>Titre </strong><span class="text-sm">{{sortDirections['title'] === 'asc' ? '⬆ Asc' : '⬇ Desc'}}</span>
+        </button>
+      </mat-menu>
+    </section>
+  
+    <section class="auto-grid">
+      @for (article of articles; track article.id) {
+        <a [routerLink]="['/articles', article.id]">
+          <mat-card class="card">
+            <article>
+            <mat-card-header>
+              <mat-card-title class="mat-h3">{{ article.title }}</mat-card-title>
+              <mat-card-subtitle>
+                <div class="flex subtitle">
+                  <time [dateTime]="article.created_at | date:'yyyy-MM-dd' ">{{ article.created_at | date:'mediumDate' }}</time>
+                  <address>{{ article.name}}</address>
+                </div>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="line-clamp line-clamp-5">{{ article.content }}</p>
+            </mat-card-content>
+            </article>
+          </mat-card>
+  
+        </a>
+      }
+    </section>
+  </main>
+  

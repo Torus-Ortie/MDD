@@ -1,0 +1,34 @@
+<main class="grid-template-layout relative">
+    <a routerLink="/articles" class="return-link">
+      <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+    </a>
+  
+    <form *ngIf="themes"  (ngSubmit)="onSubmit()">
+      <h2>Créer un nouvel article</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>{{labels['theme']}}</mat-label>
+        <mat-select
+          [formControl]="formControls['theme']"
+          (blur)="onBlur('theme')"
+        >
+          <mat-option *ngFor="let theme of themes" [value]="theme.id">{{ theme.title }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControls['theme'].invalid && formControls['theme'].touched">{{errorMessages['theme']}}</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>{{labels['title']}}</mat-label>
+        <input matInput [formControl]="formControls['title']" (blur)="onBlur('title')">
+        <mat-error *ngIf="formControls['title'].invalid && formControls['title'].touched">{{errorMessages['title']}}</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" >
+        <mat-label>{{labels['content']}}</mat-label>
+        <textarea rows="5" matInput [formControl]="formControls['content']" (blur)="onBlur('content')" ></textarea>
+        <mat-error *ngIf="formControls['content'].invalid && formControls['content'].touched">{{errorMessages['content']}}</mat-error>
+      </mat-form-field>
+  
+      <button type="submit" [disabled]="formControls['theme'].invalid || formControls['title'].invalid || formControls['content'].invalid" mat-raised-button color="primary">Créer</button>
+    </form>
+  </main>
+  
