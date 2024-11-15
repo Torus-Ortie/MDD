@@ -25,14 +25,11 @@ import com.openclassrooms.mddapi.services.UserService;
 @RequestMapping("/api/auth")
 public class LoginController {
 
+	@Autowired
 	private JWTService jwtService;
 
 	@Autowired
     private UserService userService;
-
-	public LoginController(JWTService jwtService) {
-		this.jwtService = jwtService;
-	}
 	
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)

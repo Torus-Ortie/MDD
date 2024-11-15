@@ -4,6 +4,8 @@ import com.openclassrooms.mddapi.dto.ArticleDTO;
 import com.openclassrooms.mddapi.dto.UserDTO;
 import com.openclassrooms.mddapi.services.ArticleService;
 import com.openclassrooms.mddapi.services.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +16,11 @@ import java.util.Optional;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
-    private final ArticleService articleService;
-    private final UserService userService;
+    @Autowired
+    private ArticleService articleService;
 
-    public ArticleController(ArticleService articleService, UserService userService) {
-        this.articleService = articleService;
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public List<ArticleDTO> getArticlesForSubscribedThemes(Authentication authentication) {

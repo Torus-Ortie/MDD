@@ -46,7 +46,6 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.themeSubscription = this.themeService.getThemes().subscribe(themes => {
       this.themes = themes;
-      console.log("themes:", themes); //TODO remove log
     });
   }
 
