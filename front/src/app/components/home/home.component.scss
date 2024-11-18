@@ -9,6 +9,10 @@ mat-card-actions {
    --gap: 4rem;
 }
   
+a {
+  margin: 1rem;
+}
+
 @media (width < 599px) {
     mat-card-actions {
       --direction: column;

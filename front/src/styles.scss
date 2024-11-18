@@ -1,12 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material/index' as mat;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@include mat.core();
 
-h1 {
-    margin: 0 !important;
-}
+// Available color palettes: https://material.io/design/color/
+$mdd-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$mdd-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+$mdd-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-.error {
-    color: red;
-}
+$mdd-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $mdd-primary,
+    accent: $mdd-accent,
+    warn: $mdd-warn,
+  )
+));
+
+@include mat.all-component-themes($mdd-theme);
+
+html, body { height: 100% }
+
+button { font-weight: bold !important }
