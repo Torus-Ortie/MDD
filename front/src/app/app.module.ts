@@ -11,7 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatOption, MatSelect} from "@angular/material/select";
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +34,8 @@ import { ArticleDetailComponent } from './features/articles/article-detail/artic
 import { ArticleFormComponent } from './features/articles/article-form/article-form.component';
 import { ArticleListComponent } from './features/articles/article-list/article-list.component';
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
-// NgOptimizedImage  MatIcon  MatProgressSpinner  MatNavList
+
+registerLocaleData(localeFr);
 
 const materialModule = [
   MatButtonModule,

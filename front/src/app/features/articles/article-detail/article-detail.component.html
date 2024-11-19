@@ -1,30 +1,26 @@
-<main class="grid-template-layout">
+<div class="detail-page">
     <a routerLink="/articles" class="return-link">
       <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
     </a>
   <article *ngIf="article"  class="article flex flex-col">
       <section>
         <h2 class="mat-h2">{{ article.title }}</h2>
-        <header class="flex justify-start justify-start wrap subtitle">
+        <div class="article-subtitle">
           <time [dateTime]="article.created_at | date:'yyyy-MM-dd' ">{{ article.created_at | date:'mediumDate' }}</time>
           <address>{{ article.name }}</address>
           <span>{{ article.themeTitle }}</span>
-        </header>
+        </div>
       <p>{{ article.content }}</p>
       </section>
 
       <mat-divider></mat-divider>
 
-      <section class="flex-1 flex flex-col">
+      <section class="article-comment">
         <h3>Commentaires</h3>
-        <div class="flex flex-col comments">
-            <article class="flex comment"  *ngFor="let comment of comments" >
-              <p class="comment-username">{{comment.name}}</p>
-<!--              <mat-card class="card flex-1" matcard>-->
-              <p class="comment-content">{{ comment.content }}</p>
-<!--              </mat-card>-->
-            </article>
-        </div>
+          <article class="comments"  *ngFor="let comment of comments" >
+            <p class="comment-username">{{comment.name}}</p>
+            <p class="comment-content">{{ comment.content }}</p>
+          </article>
       </section>
   </article>
 
@@ -75,4 +71,4 @@
       </mat-icon>
     </button>
   </form>
-</main>
+</div>

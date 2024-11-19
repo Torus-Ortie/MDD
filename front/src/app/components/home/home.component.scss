@@ -1,20 +1,19 @@
-main {
-    --justify: center;
-    align-items: center;
-    padding-top: 10vh;
-    padding-inline: 1rem;
-}
-  
-mat-card-actions {
-   --gap: 4rem;
+div {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10vh;
+  padding-inline: 1rem;
+  margin: auto;
 }
   
 a {
   margin: 1rem;
+  margin: 1 auto;
+  width: 40%;
 }
 
-@media (width < 599px) {
-    mat-card-actions {
-      --direction: column;
-    }
+img {
+  max-width : 100%;
+  height : auto;
 }

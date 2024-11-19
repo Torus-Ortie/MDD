@@ -3,7 +3,7 @@
 </header>
 <mat-sidenav-container>
   <mat-sidenav  #sidenav mode="over" position="end"  [ngClass]="{'open': isOpen}" role="navigation">
-    <div class="flex flex-col">
+    <nav class="auto-grid">
       <a routerLink="/articles" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">Articles</a>
       <a routerLink="/themes" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()">Thèmes</a>
       <a routerLink="/me" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()"
@@ -11,14 +11,14 @@
             --justify: center;
           display: flex;
           flex-direction: column;
-          align-items:center;">
+          align-items:flex-end;">
         <mat-icon aria-hidden="false" aria-label="me" fontIcon="account_circle" class="avatar"
           style="font-size: 48px;
                         width: 48px;
                         height: 48px;">
         </mat-icon>
       </a>
-    </div>
+    </nav>
   </mat-sidenav>
   <mat-sidenav-content class="mat-sidenav-content-wrapper">
     <router-outlet></router-outlet>
