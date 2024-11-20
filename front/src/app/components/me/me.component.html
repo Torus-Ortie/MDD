@@ -4,9 +4,9 @@
   
       <form (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
-          <mat-label>{{labels['username']}}</mat-label>
-          <input matInput [formControl]="formControls['username']" (blur)="onBlur('username')">
-          <mat-error *ngIf="formControls['username'].invalid && formControls['username'].touched">{{errorMessages['username']}}</mat-error>
+          <mat-label>{{labels['name']}}</mat-label>
+          <input matInput [formControl]="formControls['name']" (blur)="onBlur('name')">
+          <mat-error *ngIf="formControls['name'].invalid && formControls['name'].touched">{{errorMessages['name']}}</mat-error>
         </mat-form-field>
   
   
@@ -16,7 +16,7 @@
           <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
         </mat-form-field>
   
-        <button type="submit" [disabled]="formControls['email'].invalid || formControls['username'].invalid" mat-raised-button color="primary">Sauvegarder</button>
+        <button type="submit" [disabled]="formControls['email'].invalid || formControls['name'].invalid" mat-raised-button color="primary">Sauvegarder</button>
       </form>
       <div class="flex">
         <button type="button" mat-button color="warn" (click)="onLogout()">Se déconnecteur</button>

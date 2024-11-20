@@ -7,9 +7,9 @@
       <h2>Inscription</h2>
   
       <mat-form-field appearance="outline">
-        <mat-label>{{labels['username']}}</mat-label>
-        <input matInput [formControl]="formControls['username']" (blur)="onBlur('username')">
-        <mat-error *ngIf="formControls['username'].invalid && formControls['username'].touched">{{errorMessages['username']}}</mat-error>
+        <mat-label>{{labels['name']}}</mat-label>
+        <input matInput [formControl]="formControls['name']" (blur)="onBlur('name')">
+        <mat-error *ngIf="formControls['name'].invalid && formControls['name'].touched">{{errorMessages['name']}}</mat-error>
       </mat-form-field>
   
       <mat-form-field appearance="outline">
@@ -24,7 +24,7 @@
         <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
       </mat-form-field>
   
-      <button type="submit" [disabled]="formControls['username'].invalid || formControls['email'].invalid || formControls['password'].invalid" mat-raised-button color="primary">S'inscrire</button>
+      <button type="submit" [disabled]="formControls['name'].invalid || formControls['email'].invalid || formControls['password'].invalid" mat-raised-button color="primary">S'inscrire</button>
     </form>
   </main>
   

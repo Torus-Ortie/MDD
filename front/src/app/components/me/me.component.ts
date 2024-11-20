@@ -20,22 +20,22 @@ export class MeComponent implements OnInit , OnDestroy {
   private userSubscription: Subscription | null = null;
 
   formControls: { [key: string]: FormControl } = {
-    username: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
   };
 
   labels: { [key: string]: string } = {
-    username: 'Nom d’utilisateur',
+    name: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
   };
 
   controlNames: { [key: string]: string } = {
-    username: 'un nom d’utilisateur avec au moins 4 caractères',
+    name: 'un nom d’utilisateur avec au moins 4 caractères',
     email: 'une adresse e-mail valide',
   };
 
   errorMessages: { [key: string]: string } = {
-    username: '',
+    name: '',
     email: '',
   };
 
@@ -51,7 +51,6 @@ export class MeComponent implements OnInit , OnDestroy {
     this.userSubscription = this.sessionService.user$.subscribe(user => {
       this.user = user;
       if (this.user) {
-        console.log('user', this.user);
         this.formControls['name'].setValue(this.user.name);
         this.formControls['email'].setValue(this.user.email);
       } else {
@@ -69,7 +68,7 @@ export class MeComponent implements OnInit , OnDestroy {
 
   onSubmit() {
 
-    if (this.formControls["username"].valid && this.formControls['email'].valid) {
+    if (this.formControls["name"].valid && this.formControls['email'].valid) {
       if (this.user && this.user.id !== undefined && this.user.id !== null) {
         const updatedUser: User = {
           id: this.user.id,

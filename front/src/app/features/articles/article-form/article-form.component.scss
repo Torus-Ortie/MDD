@@ -1,0 +1,43 @@
+.grid-template-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+    "back-button form .";
+}
+  
+@media(width < 599px){
+  main {
+    padding-inline: 0.25rem;
+  }
+  .grid-template-layout {
+    display: grid;
+    grid-template-columns: 1rem 1fr 1rem;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+    "back-button article ."
+    "form form form";
+  }
+}
+  
+h2 {
+  margin-inline: auto;
+}
+
+button[type="submit"] {
+  margin-block: 2rem;
+  margin-inline: auto;
+  width: 50%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 0.75rem;
+  width: 100%;
+  max-width: calc(min(70ch, 100vw));
+  margin-inline: auto;
+  place-self: stretch;
+  gap: 1rem;
+}
+  

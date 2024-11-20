@@ -2,6 +2,8 @@ package com.openclassrooms.mddapi.controllers;
 
 import com.openclassrooms.mddapi.dto.CommentDTO;
 import com.openclassrooms.mddapi.services.CommentService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +12,8 @@ import java.util.List;
 @RequestMapping("/api/articles/{articleId}/comments")
 public class CommentController {
 
-    private final CommentService commentService;
-
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping
     public List<CommentDTO> getCommentsByArticleId(@PathVariable Long articleId) {

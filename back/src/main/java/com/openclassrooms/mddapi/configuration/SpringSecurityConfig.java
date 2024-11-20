@@ -1,6 +1,12 @@
 package com.openclassrooms.mddapi.configuration;
 
 import com.openclassrooms.mddapi.services.CustomUserDetailsService;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
 import java.util.Arrays;
@@ -39,19 +45,28 @@ public class SpringSecurityConfig {
 	private String jwtKey;
 
 	@Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+			.components(new Components()
+				.addSecuritySchemes("bearer-key",
+					new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
+			.addSecurityItem(new SecurityRequirement().addList("bearer-key"));
+    }
+
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
-				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.csrf(csrf -> csrf.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/api/auth/login", "/api/auth/register")
-					.permitAll()
-					.anyRequest()
-					.authenticated()
-				)
-				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .build();
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+			.csrf(csrf -> csrf.disable())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/", "/api/auth/login", "/api/auth/register", "/swagger-ui/**", "/v3/api-docs/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated()
+			)
+			.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+			.build();
 	}
 
 	@Bean
@@ -59,7 +74,7 @@ public class SpringSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

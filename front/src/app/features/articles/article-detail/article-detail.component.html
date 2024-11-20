@@ -1,0 +1,74 @@
+<div class="detail-page">
+    <a routerLink="/articles" class="return-link">
+      <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+    </a>
+  <article *ngIf="article"  class="article flex flex-col">
+      <section>
+        <h2 class="mat-h2">{{ article.title }}</h2>
+        <div class="article-subtitle">
+          <time [dateTime]="article.created_at | date:'yyyy-MM-dd' ">{{ article.created_at | date:'mediumDate' }}</time>
+          <address>{{ article.name }}</address>
+          <span>{{ article.themeTitle }}</span>
+        </div>
+      <p>{{ article.content }}</p>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <section class="article-comment">
+        <h3>Commentaires</h3>
+          <article class="comments"  *ngFor="let comment of comments" >
+            <p class="comment-username">{{comment.name}}</p>
+            <p class="comment-content">{{ comment.content }}</p>
+          </article>
+      </section>
+  </article>
+
+  <form *ngIf="article" (ngSubmit)="onSubmitComment()" class="flex" >
+    <mat-form-field appearance="outline" class="flex-1" [ngClass]="{'mat-form-field-invalid': formControls['content'].invalid && formControls['content'].dirty}">
+      <mat-label>{{labels['content']}}</mat-label>
+      <textarea matInput rows="2" [formControl]="formControls['content']" (blur)="onBlur('content')" ></textarea>
+
+      <button
+        class="submit-button-mobile"
+        type="submit"
+        [disabled]="formControls['content'].invalid"
+        matSuffix
+        style="background-color: transparent;
+                 justify-content: center;
+                 align-items: center;
+                 width: 35px;
+                 height: 35px;
+                 border: none;">
+        <mat-icon aria-hidden="false" aria-label="envoyer" fontIcon="send" color="primary"
+                  style="font-size: 25px;
+                       width: 25px;
+                       height: 25px;
+                       padding: 0;
+                       margin-bottom: 20px;
+                       transform: rotate(-45deg);">
+        </mat-icon>
+      </button>
+
+      <mat-error *ngIf="formControls['content'].invalid && formControls['content'].dirty">{{errorMessages['content']}}</mat-error>
+    </mat-form-field>
+    <button
+      class="submit-button-standard"
+      type="submit"
+      [disabled]="formControls['content'].invalid"
+      style="background-color: transparent;
+                 justify-content: center;
+                 align-items: center;
+                 width: 50px;
+                 height: 50px;
+                 border: none;">
+      <mat-icon aria-hidden="false" aria-label="envoyer" fontIcon="send" color="primary"
+                style="font-size: 40px;
+                       width: 40px;
+                       height: 40px;
+                       margin-bottom: 20px;
+                       transform: rotate(-45deg);">
+      </mat-icon>
+    </button>
+  </form>
+</div>

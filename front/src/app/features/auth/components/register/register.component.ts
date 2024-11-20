@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private subscription: Subscription | undefined;
 
 formControls: { [key: string]: FormControl } = {
-  username: new FormControl('', [Validators.required, Validators.minLength(4)]),
+  name: new FormControl('', [Validators.required, Validators.minLength(4)]),
   email: new FormControl('', [Validators.email, Validators.required]),
   password: new FormControl('', [
     Validators.required,
@@ -26,19 +26,19 @@ formControls: { [key: string]: FormControl } = {
 };
 
 labels: { [key: string]: string } = {
-  username: 'Nom d’utilisateur',
+  name: 'Nom d’utilisateur',
   email: 'Adresse e-mail',
   password: 'Mot de passe',
 };
 
 controlNames: { [key: string]: string } = {
-  username: 'un nom d’utilisateur avec au moins 4 caractères',
+  name: 'un nom d’utilisateur avec au moins 4 caractères',
   email: 'une adresse e-mail valide',
   password: 'un mot de passe avec au moins 8 caractères, dont 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial',
 };
 
 errorMessages: { [key: string]: string } = {
-  username: '',
+  name: '',
   email: '',
   password: '',
 };
@@ -61,9 +61,9 @@ errorMessages: { [key: string]: string } = {
   }
 
   onSubmit(): void {
-    if (this.formControls["username"].valid && this.formControls['email'].valid && this.formControls['password'].valid) {
+    if (this.formControls["name"].valid && this.formControls['email'].valid && this.formControls['password'].valid) {
       const registerRequest: RegisterRequest = {
-        name: this.formControls['username'].value,
+        name: this.formControls['name'].value,
         email: this.formControls['email'].value,
         password: this.formControls['password'].value,
       };

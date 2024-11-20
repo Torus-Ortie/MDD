@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler, LOCALE_ID } from '@angular/core';
 
 import { MatDivider } from "@angular/material/divider";
 import { MatButtonModule } from '@angular/material/button';
@@ -8,8 +8,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatOption, MatSelect} from "@angular/material/select";
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,8 +30,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 import { RegisterComponent } from './features/auth/components/register/register.component';
 import { ThemesComponent } from './features/themes/themes.component';
-import { ArticlesComponent } from './features/articles/articles.component';
+import { ArticleDetailComponent } from './features/articles/article-detail/article-detail.component';
+import { ArticleFormComponent } from './features/articles/article-form/article-form.component';
+import { ArticleListComponent } from './features/articles/article-list/article-list.component';
+import { GlobalErrorHandler } from './services/globalerrorhandler.service';
 
+registerLocaleData(localeFr);
 
 const materialModule = [
   MatButtonModule,
@@ -38,7 +45,10 @@ const materialModule = [
   MatSidenavModule,
   MatFormFieldModule,
   MatInputModule,
-  MatDivider
+  MatDivider,
+  MatMenuModule,
+  MatOption,
+  MatSelect
 ]
 
 @NgModule({
@@ -52,7 +62,9 @@ const materialModule = [
     HeaderComponent,
     SidenavComponent,
     ThemesComponent,
-    ArticlesComponent
+    ArticleDetailComponent,
+    ArticleFormComponent,
+    ArticleListComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +77,9 @@ const materialModule = [
     ...materialModule
   ],
   providers: [
-    provideHttpClient(withInterceptors([jwtInterceptor]))
+    { provide: LOCALE_ID, useValue: 'fr'},
+    provideHttpClient(withInterceptors([jwtInterceptor])),
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ],
   bootstrap: [AppComponent]
 })

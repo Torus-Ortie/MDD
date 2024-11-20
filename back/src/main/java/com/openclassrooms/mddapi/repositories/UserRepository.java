@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @NonNull
     Optional<User> findById(@NonNull Long id);
-
+    
     User findByEmail(String email);
     User findByName(String name);
 }
