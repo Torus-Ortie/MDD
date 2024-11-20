@@ -39,8 +39,9 @@ public class UserService {
     /**
      * Save a new user in Database
      *
-     * @param user - The User to save mapped as UserLoginDTO
-     *
+     * @param userRegisterDTO - The User to save mapped as UserLoginDTO
+     * @return The User saved mapped as UserLoginDTO
+     * 
      */
     public UserDTO registerNewUser(UserRegisterDTO userRegisterDTO) {
         User existingUser = userRepository.findByEmail(userRegisterDTO.getEmail());
@@ -65,6 +66,13 @@ public class UserService {
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
+    /**
+     * Authenticate a user
+     *
+     * @param userloginDTO - The User to authenticate mapped as UserLoginDTO
+     * @return The current session properties
+     * 
+     */
     public Authentication authenticate(UserLoginDTO userloginDTO) {
         User user = userRepository.findByEmail(userloginDTO.getEmailOrName());
         if (user == null) {
@@ -76,7 +84,7 @@ public class UserService {
         try {
 
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userloginDTO.getEmailOrName(), userloginDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(userloginDTO.getEmailOrName(), userloginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return authentication;
         } catch (AuthenticationException e) {
@@ -88,7 +96,7 @@ public class UserService {
      * Get the current connected user of the session
      *
      * @param authentication - The current session properties
-     * @return a User mapped as UserDTO
+     * @return User mapped as UserDTO
      *
      */
     public UserDTO getCurrentUser(Authentication authentication) {
@@ -103,20 +111,36 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    /**
+     * Update a user
+     *
+     * @param userDTO - The User to update mapped as UserLoginDTO
+     * @param authentication - The current session properties
+     * @return User updated and mapped as UserDTO
+     * 
+     */
     public UserDTO updateUser(UserDTO userDTO, Authentication authentication) {
         UserDTO currentUserDTO = getCurrentUser(authentication);
         User user = userRepository.findById(currentUserDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
+    /**
+     * Subscribe a theme
+     *
+     * @param themeId - The theme to subscribe
+     * @param authentication - The current session properties
+     * @return User mapped as UserDTO
+     * 
+     */
     public UserDTO subscribeToTheme(Long themeId, Authentication authentication) {
         UserDTO currentUserDTO = getCurrentUser(authentication);
         User user = userRepository.findById(currentUserDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
         if (!themeRepository.existsById(themeId)) {
             throw new EntityNotFoundException("Theme not found");
         }
@@ -128,10 +152,18 @@ public class UserService {
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
+    /**
+     * Unsubscribe a theme
+     *
+     * @param themeId - The theme to unsibscribe
+     * @param authentication - The current session properties
+     * @return User mapped as UserDTO
+     * 
+     */
     public UserDTO unsubscribeFromTheme(Long themeId, Authentication authentication) {
         UserDTO currentUserDTO = getCurrentUser(authentication);
         User user = userRepository.findById(currentUserDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
         if (!themeRepository.existsById(themeId)) {
             throw new EntityNotFoundException("Theme not found");
         }

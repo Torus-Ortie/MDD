@@ -28,9 +28,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         user.getSubscribedThemeIds().size();
         return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities(new ArrayList<>())
-                .build();
+            .password(user.getPassword())
+            .authorities(new ArrayList<>())
+            .build();
     }
 
 }

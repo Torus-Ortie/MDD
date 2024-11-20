@@ -18,6 +18,12 @@ public class ThemeService {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Gat all the themes
+     *
+     * @return A list of theme mapped as ThemeDTO
+     * 
+     */
     public List<ThemeDTO> getThemes() {
         return themeRepository.findAll().stream()
             .map(theme -> modelMapper.map(theme, ThemeDTO.class))
