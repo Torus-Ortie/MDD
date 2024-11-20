@@ -24,6 +24,13 @@ export class ArticleService {
     ).subscribe();
   }
 
+  /**
+   * Get all the article specific to themes
+   *
+   * @param themeIds - A table of theme id
+   * @return An observable that contain a table of articles
+   * 
+   */
   getArticlesForThemes(themeIds: number[]): Observable<Article[]> {
     return this.http.get<Article[]>(this.apiUrl).pipe(
       tap(articles => {
@@ -33,6 +40,13 @@ export class ArticleService {
     );
   }
 
+  /**
+   * Sort all the article displayed
+   *
+   * @param sortBy - The type of the sort ('date' or 'title')
+   * @param direction - The direction of the sort ('desc' or 'asc')
+   * 
+   */
   sortArticles(sortBy: string, direction: string = 'desc'): void {
     if (this._articles.value) {
       switch (sortBy) {
@@ -50,6 +64,13 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Get a specific article
+   *
+   * @param id - The type of the sort ('date' or 'title')
+   * @return An observable that contain an article
+   * 
+   */
   getArticle(id: number): Observable<Article> {
     const article = this._articles.value.find(article => article.id === id);
     if (article) {
@@ -63,6 +84,13 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Create an article
+   *
+   * @param article - The article to create (with only the title, content and themeId properties)
+   * @return An observable that contain an article
+   * 
+   */
   createArticle(article: Pick<Article, 'title' | 'content' | 'themeId'>): Observable<Article> {
     return this.sessionService.user$.pipe(
       take(1),
@@ -86,11 +114,25 @@ export class ArticleService {
     );
   }
 
+  /**
+   * Get all the comments of an article
+   *
+   * @param articleId - The id of the article
+   * @return An observable that contain a table of comment
+   * 
+   */
   getComments(articleId: number): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${this.apiUrl}/${articleId}/comments`);
   }
 
-    createComment(comment: Pick<Comment, 'articleId' | 'content'>): Observable<Comment> {
+  /**
+   * Create a new comment
+   *
+   * @param comment - The comment to create (with only the article id and content)
+   * @return An observable that contain a comment
+   * 
+   */
+  createComment(comment: Pick<Comment, 'articleId' | 'content'>): Observable<Comment> {
     return this.sessionService.user$.pipe(
       take(1),
       switchMap(currentUser => {
@@ -110,5 +152,5 @@ export class ArticleService {
         return this.http.post<Comment>(`${this.apiUrl}/${comment.articleId}/comments`, completeCommentData);
       })
     );
-    }
+  }
 }

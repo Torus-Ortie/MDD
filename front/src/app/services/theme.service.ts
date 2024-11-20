@@ -15,6 +15,12 @@ export class ThemeService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Get all the theme
+   *
+   * @return An observable that contain a table of theme
+   * 
+   */
   getThemes(): Observable<Theme[]> {
     if (this.themes) {
       return of(this.themes);
