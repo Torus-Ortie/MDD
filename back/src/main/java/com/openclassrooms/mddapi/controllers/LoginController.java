@@ -39,7 +39,6 @@ public class LoginController {
 	@ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
 	public ResponseEntity<TokenResponseDTO> getRegistreted(@RequestBody UserRegisterDTO userRegisterDTO) {
-		
 		userService.registerNewUser(modelMapper.map(userRegisterDTO, User.class));
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userRegisterDTO.getEmail(), userRegisterDTO.getPassword());
 		String emailOrName = authentication.getName();

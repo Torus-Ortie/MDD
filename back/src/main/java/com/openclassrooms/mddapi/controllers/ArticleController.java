@@ -44,15 +44,15 @@ public class ArticleController {
         return articleService.getArticlesForSubscribedThemes(themeIds).stream()
         .map(article -> {
             User author = userRepository.findById(article.getUserId())
-            .orElseThrow(() -> new EntityNotFoundException("User not found with id " + article.getUserId()));
-        Theme theme = themeRepository.findById(article.getThemeId())
-            .orElseThrow(() -> new EntityNotFoundException("Theme not found with id " + article.getThemeId()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + article.getUserId()));
+            Theme theme = themeRepository.findById(article.getThemeId())
+                .orElseThrow(() -> new EntityNotFoundException("Theme not found with id " + article.getThemeId()));
 
-        ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
-        articleDTO.setName(author.getName());
-        articleDTO.setThemeTitle(theme.getTitle());
+            ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
+            articleDTO.setName(author.getName());
+            articleDTO.setThemeTitle(theme.getTitle());
 
-        return articleDTO;
+            return articleDTO;
         })
         .collect(Collectors.toList());
     }
