@@ -1,22 +1,13 @@
 package com.openclassrooms.mddapi.services;
 
-import com.openclassrooms.mddapi.dto.UserLoginDTO;
-import com.openclassrooms.mddapi.dto.UserRegisterDTO;
-import com.openclassrooms.mddapi.dto.UserDTO;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,73 +24,45 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private ModelMapper modelMapper;
 
     /**
      * Save a new user in Database
      *
-     * @param userRegisterDTO - The User to save mapped as UserLoginDTO
-     * @return The User saved mapped as UserLoginDTO
+     * @param userRegister - The User to save mapped as UserLogin
+     * @return The User saved mapped as UserLogin
      * 
      */
-    public UserDTO registerNewUser(UserRegisterDTO userRegisterDTO) {
-        User existingUser = userRepository.findByEmail(userRegisterDTO.getEmail());
+    public User registerNewUser(User userRegister) {
+        User existingUser = userRepository.findByEmail(userRegister.getEmail());
         if (existingUser != null) {
             throw new IllegalArgumentException("Email is already in use");
         }
 
-        existingUser = userRepository.findByName(userRegisterDTO.getName());
+        existingUser = userRepository.findByName(userRegister.getName());
         if (existingUser != null) {
             throw new IllegalArgumentException("Username is already in use");
         }
 
-        if (userRegisterDTO.getPassword().length() < 8) {
+        if (userRegister.getPassword().length() < 8) {
             throw new IllegalArgumentException("Password must be at least 8 characters long");
         }
 
         User user = new User();
-        user.setEmail(userRegisterDTO.getEmail());
-        user.setName(userRegisterDTO.getName());
-        user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserDTO.class);
-    }
-
-    /**
-     * Authenticate a user
-     *
-     * @param userloginDTO - The User to authenticate mapped as UserLoginDTO
-     * @return The current session properties
-     * 
-     */
-    public Authentication authenticate(UserLoginDTO userloginDTO) {
-        User user = userRepository.findByEmail(userloginDTO.getEmailOrName());
-        if (user == null) {
-            user = userRepository.findByName(userloginDTO.getEmailOrName());
-        }
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid email or username");
-        }
-        try {
-
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userloginDTO.getEmailOrName(), userloginDTO.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return authentication;
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid password");
-        }
+        user.setEmail(userRegister.getEmail());
+        user.setName(userRegister.getName());
+        user.setPassword(passwordEncoder.encode(userRegister.getPassword()));
+        userRepository.save(user);
+        return user;
     }
 
     /**
      * Get the current connected user of the session
      *
-     * @param authentication - The current session properties
-     * @return User mapped as UserDTO
+     * @param emailOrName - The current username connected
+     * @return User mapped as User
      *
      */
-    public UserDTO getCurrentUser(String emailOrName) {
+    public User getCurrentUser(String emailOrName) {
         User user = userRepository.findByEmail(emailOrName);
         if (user == null) {
             user = userRepository.findByName(emailOrName);
@@ -107,70 +70,64 @@ public class UserService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return modelMapper.map(user, UserDTO.class);
+        return user;
     }
 
     /**
      * Update a user
      *
-     * @param userDTO - The User to update mapped as UserLoginDTO
-     * @param authentication - The current session properties
-     * @return User updated and mapped as UserDTO
+     * @param user - The User to update mapped as UserLogin
+     * @param emailOrName - The current username connected
+     * @return User updated and mapped as User
      * 
      */
-    public UserDTO updateUser(UserDTO userDTO, String emailOrName) {
-        UserDTO currentUserDTO = getCurrentUser(emailOrName);
-        User user = userRepository.findById(currentUserDTO.getId())
-            .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserDTO.class);
+    public User updateUser(User user, String emailOrName) {
+        User currentUser = getCurrentUser(emailOrName);
+        currentUser.setName(user.getName());
+        currentUser.setEmail(user.getEmail());
+        userRepository.save(currentUser);
+        return currentUser;
     }
 
     /**
      * Subscribe a theme
      *
      * @param themeId - The theme to subscribe
-     * @param authentication - The current session properties
-     * @return User mapped as UserDTO
+     * @param emailOrName - The current username connected
+     * @return User mapped as User
      * 
      */
-    public UserDTO subscribeToTheme(Long themeId, String emailOrName) {
-        UserDTO currentUserDTO = getCurrentUser(emailOrName);
-        User user = userRepository.findById(currentUserDTO.getId())
-            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public User subscribeToTheme(Long themeId, String emailOrName) {
+        User currentUser = getCurrentUser(emailOrName);;
         if (!themeRepository.existsById(themeId)) {
             throw new EntityNotFoundException("Theme not found");
         }
-        if (user.getSubscribedThemeIds().contains(themeId)) {
+        if (currentUser.getSubscribedThemeIds().contains(themeId)) {
             throw new IllegalArgumentException("User is already subscribed to this theme");
         }
-        user.getSubscribedThemeIds().add(themeId);
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserDTO.class);
+        currentUser.getSubscribedThemeIds().add(themeId);
+        userRepository.save(currentUser);
+        return currentUser;
     }
 
     /**
      * Unsubscribe a theme
      *
      * @param themeId - The theme to unsibscribe
-     * @param authentication - The current session properties
-     * @return User mapped as UserDTO
+     * @param emailOrName - The current username connected
+     * @return User mapped as User
      * 
      */
-    public UserDTO unsubscribeFromTheme(Long themeId, String emailOrName) {
-        UserDTO currentUserDTO = getCurrentUser(emailOrName);
-        User user = userRepository.findById(currentUserDTO.getId())
-            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public User unsubscribeFromTheme(Long themeId, String emailOrName) {
+        User currentUser = getCurrentUser(emailOrName);
         if (!themeRepository.existsById(themeId)) {
             throw new EntityNotFoundException("Theme not found");
         }
-        if (!user.getSubscribedThemeIds().contains(themeId)) {
+        if (!currentUser.getSubscribedThemeIds().contains(themeId)) {
             throw new IllegalArgumentException("User is not subscribed to this theme");
         }
-        user.getSubscribedThemeIds().remove(themeId);
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserDTO.class);
+        currentUser.getSubscribedThemeIds().remove(themeId);
+        userRepository.save(currentUser);
+        return currentUser;
     }
 }

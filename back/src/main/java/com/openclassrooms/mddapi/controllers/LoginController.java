@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mddapi.dto.TokenResponseDTO;
 import com.openclassrooms.mddapi.dto.UserLoginDTO;
 import com.openclassrooms.mddapi.dto.UserRegisterDTO;
+import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.services.JWTService;
 import com.openclassrooms.mddapi.services.UserService;
 
@@ -38,7 +39,8 @@ public class LoginController {
 	@ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
 	public ResponseEntity<TokenResponseDTO> getRegistreted(@RequestBody UserRegisterDTO userRegisterDTO) {
-		userService.registerNewUser(userRegisterDTO);
+		
+		userService.registerNewUser(modelMapper.map(userRegisterDTO, User.class));
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userRegisterDTO.getEmail(), userRegisterDTO.getPassword());
 		String emailOrName = authentication.getName();
         String token = jwtService.generateToken(emailOrName);
