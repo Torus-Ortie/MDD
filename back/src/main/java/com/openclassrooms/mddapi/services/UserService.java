@@ -99,8 +99,7 @@ public class UserService {
      * @return User mapped as UserDTO
      *
      */
-    public UserDTO getCurrentUser(Authentication authentication) {
-        String emailOrName = authentication.getName();
+    public UserDTO getCurrentUser(String emailOrName) {
         User user = userRepository.findByEmail(emailOrName);
         if (user == null) {
             user = userRepository.findByName(emailOrName);
@@ -119,8 +118,8 @@ public class UserService {
      * @return User updated and mapped as UserDTO
      * 
      */
-    public UserDTO updateUser(UserDTO userDTO, Authentication authentication) {
-        UserDTO currentUserDTO = getCurrentUser(authentication);
+    public UserDTO updateUser(UserDTO userDTO, String emailOrName) {
+        UserDTO currentUserDTO = getCurrentUser(emailOrName);
         User user = userRepository.findById(currentUserDTO.getId())
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setName(userDTO.getName());
@@ -137,8 +136,8 @@ public class UserService {
      * @return User mapped as UserDTO
      * 
      */
-    public UserDTO subscribeToTheme(Long themeId, Authentication authentication) {
-        UserDTO currentUserDTO = getCurrentUser(authentication);
+    public UserDTO subscribeToTheme(Long themeId, String emailOrName) {
+        UserDTO currentUserDTO = getCurrentUser(emailOrName);
         User user = userRepository.findById(currentUserDTO.getId())
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
         if (!themeRepository.existsById(themeId)) {
@@ -160,8 +159,8 @@ public class UserService {
      * @return User mapped as UserDTO
      * 
      */
-    public UserDTO unsubscribeFromTheme(Long themeId, Authentication authentication) {
-        UserDTO currentUserDTO = getCurrentUser(authentication);
+    public UserDTO unsubscribeFromTheme(Long themeId, String emailOrName) {
+        UserDTO currentUserDTO = getCurrentUser(emailOrName);
         User user = userRepository.findById(currentUserDTO.getId())
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
         if (!themeRepository.existsById(themeId)) {

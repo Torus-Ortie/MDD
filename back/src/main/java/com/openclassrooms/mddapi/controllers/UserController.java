@@ -19,25 +19,29 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
-        UserDTO userDTO = userService.getCurrentUser(authentication);
+        String emailOrName = authentication.getName();
+        UserDTO userDTO = userService.getCurrentUser(emailOrName);
         return ResponseEntity.ok(userDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public UserDTO updateUser(@RequestBody UserDTO userDTO, Authentication authentication) {
-        return userService.updateUser(userDTO, authentication);
+        String emailOrName = authentication.getName();
+        return userService.updateUser(userDTO, emailOrName);
     }
 
     @PostMapping("/themes/{themeId}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO subscribeToTheme(@PathVariable Long themeId, Authentication authentication) {
-        return userService.subscribeToTheme(themeId, authentication);
+        String emailOrName = authentication.getName();
+        return userService.subscribeToTheme(themeId, emailOrName);
     }
 
     @DeleteMapping("/themes/{themeId}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO unsubscribeFromTheme(@PathVariable Long themeId, Authentication authentication) {
-        return userService.unsubscribeFromTheme(themeId, authentication);
+        String emailOrName = authentication.getName();
+        return userService.unsubscribeFromTheme(themeId, emailOrName);
     }
 }

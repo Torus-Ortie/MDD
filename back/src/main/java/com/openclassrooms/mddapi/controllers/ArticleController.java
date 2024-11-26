@@ -24,7 +24,8 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleDTO> getArticlesForSubscribedThemes(Authentication authentication) {
-        UserDTO userDTO = userService.getCurrentUser(authentication);
+        String emailOrName = authentication.getName();
+        UserDTO userDTO = userService.getCurrentUser(emailOrName);
         List<Long> themeIds = userDTO.getSubscribedThemeIds();
         return articleService.getArticlesForSubscribedThemes(themeIds);
     }
