@@ -1,8 +1,8 @@
 package com.openclassrooms.mddapi.controllers;
 
 import java.util.Collections;
-import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.openclassrooms.mddapi.dto.TokenResponseDTO;
 import com.openclassrooms.mddapi.dto.UserLoginDTO;
 import com.openclassrooms.mddapi.dto.UserRegisterDTO;
 import com.openclassrooms.mddapi.services.JWTService;
@@ -29,25 +30,36 @@ public class LoginController {
 
 	@Autowired
     private UserService userService;
+
+	@Autowired
+    private ModelMapper modelMapper;
 	
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-	public ResponseEntity<Map<String, String>> getRegistreted(@RequestBody UserRegisterDTO userRegisterDTO) {
+	public ResponseEntity<TokenResponseDTO> getRegistreted(@RequestBody UserRegisterDTO userRegisterDTO) {
 		userService.registerNewUser(userRegisterDTO);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userRegisterDTO.getEmail(), userRegisterDTO.getPassword());
 		String emailOrName = authentication.getName();
         String token = jwtService.generateToken(emailOrName);
-        return ResponseEntity.ok(Collections.singletonMap("token", token));
+		TokenResponseDTO tokenResponseDTO = modelMapper.map(
+            Collections.singletonMap("token", token),
+            TokenResponseDTO.class
+        );
+        return ResponseEntity.ok(tokenResponseDTO);
 	}
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
     @ResponseBody
-	public ResponseEntity<Map<String, String>> getToken(@RequestBody UserLoginDTO userLoginDTO) {
+	public ResponseEntity<TokenResponseDTO> getToken(@RequestBody UserLoginDTO userLoginDTO) {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmailOrName(), userLoginDTO.getPassword());
 		String emailOrName = authentication.getName();
 		String token = jwtService.generateToken(emailOrName);
-		return ResponseEntity.ok(Collections.singletonMap("token", token));
+		TokenResponseDTO tokenResponseDTO = modelMapper.map(
+            Collections.singletonMap("token", token),
+            TokenResponseDTO.class
+        );
+		return ResponseEntity.ok(tokenResponseDTO);
 	}
 }
