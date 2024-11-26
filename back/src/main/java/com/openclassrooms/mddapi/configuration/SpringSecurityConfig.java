@@ -2,11 +2,6 @@ package com.openclassrooms.mddapi.configuration;
 
 import com.openclassrooms.mddapi.services.CustomUserDetailsService;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
 import java.util.Arrays;
@@ -43,15 +38,6 @@ public class SpringSecurityConfig {
 
 	@Value("${jwt.key}")
 	private String jwtKey;
-
-	@Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-			.components(new Components()
-				.addSecuritySchemes("bearer-key",
-					new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
-			.addSecurityItem(new SecurityRequirement().addList("bearer-key"));
-    }
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
